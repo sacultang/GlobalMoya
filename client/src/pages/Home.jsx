@@ -1,7 +1,12 @@
 import React from "react";
-
+import NewsCard from '../components/NewsCard';
 const Home = () => {
-  return <div>Home</div>;
+  return (
+    <>
+      <NewsCard />
+    </>
+  )
+  ;
 };
 
 export default Home;
