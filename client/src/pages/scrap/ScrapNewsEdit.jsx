@@ -69,7 +69,7 @@ const ScrapNewsEdit = ({ scrapcheck, view, apply }) => {
       setDtNewsId([]);
       setOpenBg(false);
     }
-    console.log("delete", groupId);
+    console.log("delete", groupId, dtNewsId);
   };
   return (
     <>

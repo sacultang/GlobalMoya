@@ -51,7 +51,7 @@ const ScrapgroupCheck = ({ item }) => {
     if (checked) {
       // 체크 반영
       setCheckedButtons([...checkedButtons, checkEl]);
-      dispatch(addCheckedGroupBtn({ checkEl }));
+      dispatch(addCheckedGroupBtn(checkEl));
     } else {
       // 체크 반영 해제
       setCheckedButtons(checkedButtons.filter((button) => button !== checkEl));
