@@ -26,6 +26,7 @@ export const colors = {
   gray350: "#c8c8c8",
   gray400: "#b7b7b7",
   gray500: "#949494",
+  gray600: "#777777",
   gray700: "#555555",
   gray750: "#3f3f3f",
   gray770: "#383838",
@@ -59,36 +60,37 @@ const deviceSizes = {
     maxWidth: pxToRem(1023),
   },
 };
-const device = {
+export const device = {
   mobile: `screen and (max-width:${deviceSizes.mobile.maxWidth})`,
   tablet: `screen and (min-width:${deviceSizes.tablet.minWidth}) and (max-width:${deviceSizes.tablet.maxWidth})`,
   laptop: `screen and (min-width:${deviceSizes.laptop.minWidth}) and (max-width:${deviceSizes.laptop.maxWidth})`,
 };
 export const cardImgType = {
-  textOnly: `
+  TextOnly: `
     display:none;
   `,
-  mediumImg: `
+  Magazine: `
     margin:14px 16px 0 0;
     width:106px;
     height: 80px;
     object-fit: cover;
     display:inline-block;
   `,
-  largeImg: `
+  CardType: `
     object-fit: cover;
     width: 100%;
+    height:208px;
   `,
 };
 export const cardTextType = {
-  textOnly: `
+  TextOnly: `
   padding: 14px 16px 0 16px;
 `,
-  mediumImg: `
+  Magazine: `
   padding: 14px 0 0 16px;
   width: 206px;
 `,
-  largeImg: `
+  CardType: `
   padding: 14px 16px 0 16px;
 `,
 };
