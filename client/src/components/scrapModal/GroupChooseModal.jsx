@@ -6,6 +6,7 @@ import { ButtonWrapDiv, ApplyBtn } from "@styles/filterStyle/filterStyle";
 import { toggleScrapMoveBtn } from "@redux/modalSlice";
 import { bookmarkSave } from "../../api/bookmarkApi";
 import { colors, pxToRem } from "@styles/theme";
+
 const GroupChooseModal = ({ showScrapMoveBtn }) => {
   const [groupList, setGroupList] = useState([]);
   const [curGroupId, setCurGroupId] = useState("");
@@ -14,7 +15,6 @@ const GroupChooseModal = ({ showScrapMoveBtn }) => {
   const newsId = useSelector((state) => state.scrapNewsSlice.newsId);
   const getFolder = async () => {
     const res = await allFolder();
-
     setGroupList(res.reports);
   };
   useEffect(() => {

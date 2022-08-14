@@ -37,9 +37,8 @@ clientServer.interceptors.response.use(
   }
 );
 
-// const SECRET_KEY = import.meta.env.VITE_SECRET_TOKEN;
-const SECRET_KEY =
-  "7eef25e8a3274b4b8b4a261bac872c963ce88c738a0e1d61ee5f639319d413ed";
+const SECRET_KEY = import.meta.env.VITE_SECRET_TOKEN;
+
 // secret_key db에 저장?
 export const stepPayServer = axios.create({
   baseURL: "https://api.steppay.kr/api",
