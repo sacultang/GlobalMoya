@@ -65,7 +65,6 @@ export const customerSearch = async (userCode) => {
       url: `/v1/customers/${userCode}`,
       method: "GET",
     })
-    console.log(response)
     if (response.status === 200) {
       return response
     }
