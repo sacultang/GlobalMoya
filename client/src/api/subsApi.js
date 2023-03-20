@@ -1,16 +1,4 @@
-import { stepPayServer } from "./baseUrl";
-
-// 프로덕트 목록 조회
-export const getProductsList = async () => {
-  try {
-    const response = await stepPayServer({
-      url: "/v1/products/product_W9gLQy9ac",
-      method: "GET",
-    });
-  } catch (e) {
-    console.log(e);
-  }
-};
+import { stepPayServer } from "./baseUrl"
 
 export const searchUserList = async (userMail) => {
   try {
@@ -20,15 +8,15 @@ export const searchUserList = async (userMail) => {
       params: {
         keyword: `${userMail}`,
       },
-    });
+    })
     if (response.status === 200) {
-      const subsUser = await customerSearch(response.data.content[0].id);
-      return { userCode: response.data, subsUser: subsUser.data };
+      const subsUser = await customerSearch(response.data.content[0].id)
+      return { userCode: response.data, subsUser: subsUser.data }
     }
   } catch (e) {
-    console.log(e);
+    throw new Error(`${e}`)
   }
-};
+}
 
 export const createOrder = async (userCode) => {
   try {
@@ -47,26 +35,24 @@ export const createOrder = async (userCode) => {
             priceCode: "price_kanX9egTB",
           },
         ],
-        customerId: `${userCode}`, //int -> DB에 저장해야?
+        customerId: `${userCode}`,
       },
-    });
+    })
     if (response.status === 200) {
-      // orderRedirect(response.orderCode);
-      // console.log(response);
-      redirectPay(response.data.orderCode);
-      return response;
+      redirectPay(response.data.orderCode)
+      return response
     }
   } catch (e) {
-    console.log(e);
+    throw new Error(`${e}`)
   }
-};
+}
 
 /* 
   결제창 띄는 함수
 */
 function redirectPay(orderCode) {
-  var url = `https://api.steppay.kr/api/public/orders/${orderCode}/pay?successUrl=http://121.135.232.105:3000/mypagemain&errorUrl=http://121.135.232.105:3000/&cancelUrl=http://121.135.232.105:3000/`;
-  window.location.href = url;
+  var url = `https://api.steppay.kr/api/public/orders/${orderCode}/pay?successUrl=http://121.135.232.105:3000/mypagemain&errorUrl=http://121.135.232.105:3000/&cancelUrl=http://121.135.232.105:3000/`
+  window.location.href = url
 }
 
 /* 
@@ -78,30 +64,15 @@ export const customerSearch = async (userCode) => {
     const response = await stepPayServer({
       url: `/v1/customers/${userCode}`,
       method: "GET",
-    });
-    console.log(response);
+    })
+    console.log(response)
     if (response.status === 200) {
-      return response;
+      return response
     }
   } catch (e) {
-    console.log(e);
+    throw new Error(`${e}`)
   }
-};
-
-export const payMentChange = async (userCode) => {
-  try {
-    const response = await stepPayServer({
-      url: `/v1/customers/${userCode}/payment-method`,
-      method: "PUT",
-    });
-    console.log(response);
-    // if (response.status === 200) {
-    //   return response.data;
-    // }
-  } catch (e) {
-    console.log(e);
-  }
-};
+}
 
 export const subsCancel = async (subsId) => {
   try {
@@ -111,9 +82,9 @@ export const subsCancel = async (subsId) => {
       data: {
         whenToCancel: "NOW",
       },
-    });
-    return response;
+    })
+    return response
   } catch (e) {
-    return e.response;
+    return e.response
   }
-};
+}
