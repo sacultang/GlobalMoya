@@ -1,42 +1,26 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { useSelector } from "react-redux"
 import {
   Card,
   MainContent,
   SubContent,
-  CardFooter,
   ImageContent,
   Abstract,
   CardHeader,
-  Tickers,
-  NoResultTickers,
 } from "@styles/newsCard/cardStyles"
-import {
-  ScrapIcon,
-  TranslateIconKo,
-  ShareIcon,
-  ExpandMoreIcon,
-  TranslateIconEn,
-} from "@styles/svgIcon"
+import { ScrapIcon, TranslateIconKo, ShareIcon, TranslateIconEn } from "@styles/svgIcon"
 import globalMOYAPremiumSvg from "@assets/globalMOYA.svg"
 import { differenceDayFuncTwo } from "../util/dateFunc"
 import { translateApi } from "../api/translateApi"
 import ErrorMsg from "./ErrorMsg"
-import { toggleScrapMoveBtn } from "@redux/modalSlice"
-import { addNewsID } from "../redux/reducer/scrapNewsSlice"
-import { useDispatch } from "react-redux"
+import { checkTransLateId } from "../util/checkTranslate"
+import CardFooterComp from "./CardFooterComp"
 import _ from "lodash"
 const NewsCard = ({ view, apply, newsList, errorMsg, lastElementRef }) => {
-  const [scrap, setScrap] = useState(false)
-  const [open, setOpen] = useState({})
   const [trakingId, setTrakingId] = useState({})
   const [translate, setTranslate] = useState([])
   const viewType = useSelector((state) => state.cardTypeSlice.viewType)
-  const dispatch = useDispatch()
-  const showScrapMoveBtn = useSelector((state) => state.modalSlice.showScrapMoveBtn)
-  const handleExpand = (e) => {
-    setOpen({ [e.target.id]: !open[e.target.id] })
-  }
+
   const translateFetch = async (newsId) => {
     const response = await translateApi(newsId)
     if (response.status === 200) {
@@ -53,7 +37,7 @@ const NewsCard = ({ view, apply, newsList, errorMsg, lastElementRef }) => {
         ...prev,
         {
           newsId,
-          description: "description",
+          description: "no text",
           title: response.data.title,
         },
       ])
@@ -61,19 +45,16 @@ const NewsCard = ({ view, apply, newsList, errorMsg, lastElementRef }) => {
   }
 
   const handleTranslate = (e, newsId) => {
-    if (translate.some((title) => title.newsId === newsId)) {
+    if (checkTransLateId(translate, newsId)) {
       setTranslate((prev) => prev.filter((item) => item.newsId !== newsId))
       return
     }
     setTrakingId({ [e.target.id]: !trakingId[e.target.id] })
     translateFetch(newsId)
   }
-  const handleScrap = (newsId) => {
-    dispatch(addNewsID(newsId))
-    dispatch(toggleScrapMoveBtn(!showScrapMoveBtn))
-  }
+
   const getTranslatedData = (newsId, key) => {
-    if (translate.some((title) => newsId === title.newsId)) {
+    if (checkTransLateId(translate, newsId)) {
       return translate.find((item) => item.newsId === newsId)[key]
     } else {
       return null
@@ -110,7 +91,7 @@ const NewsCard = ({ view, apply, newsList, errorMsg, lastElementRef }) => {
                   {news.brandName} | {differenceDayFuncTwo(news.publishTime)}
                 </div>
                 <div className="iconGroup">
-                  {translate && translate.some((title) => news.newsId === title.newsId) ? (
+                  {checkTransLateId(translate, news.newsId) ? (
                     <TranslateIconEn
                       id={news.newsId}
                       onClick={(e) => {
@@ -125,35 +106,12 @@ const NewsCard = ({ view, apply, newsList, errorMsg, lastElementRef }) => {
                       }}
                     />
                   )}
-
                   <ShareIcon />
-                  <ScrapIcon onClick={() => handleScrap(news.newsId)} $scrap={scrap} />
+                  <ScrapIcon />
                 </div>
               </SubContent>
-              {news.assetTags && news.assetTags.length > 0 ? (
-                <CardFooter>
-                  <Tickers $expand={`${open[idx] ? "expand" : "none"}`}>
-                    {news.nluLabels.slice(0, 3).map((label, index) => (
-                      <li key={label + index}>
-                        <strong>Related Symbols</strong> {label}
-                      </li>
-                    ))}
-                  </Tickers>
-
-                  <div className="tags">
-                    {news.assetTags.map((tag, index) => (
-                      <span key={tag + index}>#{tag}</span>
-                    ))}
-                  </div>
-
-                  <ExpandMoreIcon
-                    id={idx}
-                    onClick={(e) => {
-                      handleExpand(e, idx)
-                    }}
-                    $expand={`${open[idx] ? "expand" : "none"}`}
-                  />
-                </CardFooter>
+              {news.assetTags ? (
+                <CardFooterComp assetTags={news.assetTags} idx={idx} nluLabels={news.nluLabels} />
               ) : (
                 <NoResultTickers />
               )}
